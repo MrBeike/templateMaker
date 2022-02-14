@@ -20,8 +20,8 @@ for i in sheet:
     data["字段中文名称"] = data["字段中文名称"].ffill()
     # 利用groupby合并同样分组，并汇总填写规则（合并单元格实质还是多个单元格，此处合并为一个单元格，sort=False保持原来顺序）
     dataNew = data.groupby(["字段中文名称"],sort=False)['填写规则'].apply(list).to_frame()
-    # 前面利用list合并填写规则，此处将list转换为字符串【lambda x: ''.join(x)）报错，暂时没弄明白】
-    dataNew['填写规则'] = dataNew['填写规则'].apply(lambda x:str(x).replace("[","").replace("]","").replace("'",""))
+    # 前面利用list合并填写规则，此处将list转换为字符串(为了后续批注换行加了\n，此处x为list)
+    dataNew['填写规则'] = dataNew['填写规则'].apply(lambda x:"\n".join(str(i) for i in x))
     # 转置
     dataTransport = dataNew.T
     # 写入文件，注意index=False，不写入索引
